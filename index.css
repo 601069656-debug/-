@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: 'Noto Serif SC', serif;
+  --font-display: 'Cinzel', serif;
+  --font-calligraphy: 'Ma Shan Zheng', 'Zhi Mang Xing', cursive;
+}
+
+@layer base {
+  body {
+    @apply bg-black text-slate-200 antialiased;
+  }
+}
+
+@layer components {
+  .glow-sm {
+    text-shadow: 0 0 10px rgba(220, 38, 38, 0.4);
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-black/20;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "entities": {
+    "GameState": {
+      "title": "GameState",
+      "description": "The complete state of a user's game session.",
+      "type": "object",
+      "properties": {
+        "status": { "type": "string", "enum": ["START_MENU", "CREATION", "STAGE_SETUP", "PLAYING", "GAME_OVER"] },
+        "character": { "$ref": "Character" },
+        "history": { "type": "array", "items": { "$ref": "Message" } },
+        "npcProfiles": { "type": "array", "items": { "$ref": "NPCProfile" } },
+        "logs": { "type": "array", "items": { "$ref": "LogSummary" } },
+        "stageSettings": { "type": "string" },
+        "selectedStages": { "type": "array", "items": { "type": "string" } },
+        "difficulty": { "type": "string", "enum": ["normal", "grand"] },
+        "warState": { "$ref": "WarState" },
+        "gaiaState": { "$ref": "GaiaState" },
+        "systemState": { "$ref": "SystemState" },
+        "lastUpdated": { "type": "number", "format": "timestamp" }
+      },
+      "required": ["status", "difficulty", "lastUpdated"]
+    },
+    "Character": {
+      "title": "Character",
+      "description": "User's character in the game.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["诸侯 (Warlord)", "将领 (General)", "谋士 (Strategist)", "在野 (Vagrant)"] },
+        "gender": { "type": "string" },
+        "appearance": { "type": "string" },
+        "setting": { "type": "string" }
+      }
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A single interaction in the conversation history.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "model"] },
+        "content": { "type": "string" }
+      },
+      "required": ["id", "role", "content"]
+    },
+    "NPCProfile": {
+      "title": "NPCProfile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "status": { "type": "string" },
+        "bondLevel": { "type": "number" },
+        "lastUpdated": { "type": "number" }
+      }
+    },
+    "LogSummary": {
+      "title": "LogSummary",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "title": { "type": "string" }
+      }
+    },
+    "WarState": {
+      "title": "WarState",
+      "type": "object",
+      "properties": {
+        "warDuration": { "type": "string" },
+        "generalStatus": { "type": "string" },
+        "officerArchitecture": { "type": "string", "enum": ["strict", "multi"] }
+      }
+    },
+    "GaiaState": {
+      "title": "GaiaState",
+      "type": "object",
+      "properties": {
+        "lastUpdated": { "type": "number" }
+      }
+    },
+    "SystemState": {
+      "title": "SystemState",
+      "type": "object",
+      "properties": {
+        "location": { "type": "string" },
+        "available_mp": { "type": "number" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Public/Private profile for the user."
+    },
+    "/games/{userId}": {
+      "schema": "GameState",
+      "description": "Current game state for the user."
+    },
+    "/games/{userId}/history/{messageId}": {
+      "schema": "Message",
+      "description": "Subcollection for message history to avoid large document sizes."
+    },
+    "/games/{userId}/npcs/{npcId}": {
+      "schema": "NPCProfile",
+      "description": "Subcollection for NPC profiles."
+    },
+    "/games/{userId}/logs/{logId}": {
+      "schema": "LogSummary",
+      "description": "Subcollection for game logs."
+    }
+  }
+}
+
